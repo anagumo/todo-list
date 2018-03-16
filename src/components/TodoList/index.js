@@ -16,17 +16,24 @@ export default class TodoList extends Component {
     header: null
   }
 
+  state = {
+    items: []
+  }
+
   addItem = () => {
-    this.props.navigation.navigate('AddTodo')
+    this.props.navigation.navigate(
+      'AddTodo',
+      { saveItem: this.saveItem }
+    )
+  }
+
+  saveItem = (newTask) => {
+    this.setState({
+      items: [...this.state.items, newTask]
+    })
   }
 
   render() {
-
-    const items = [
-      '1. Go to the library',
-      '2. Call my mom',
-      '3. Study Computer Science'
-    ]
 
     return (
       <View style={styles.container}>
@@ -42,7 +49,7 @@ export default class TodoList extends Component {
           </View>
           <FlatList
             style={styles.content}
-            data= {items}
+            data= {this.state.items}
             renderItem={(row) => {
               return <TodoItem title={row.item} />
             }}
