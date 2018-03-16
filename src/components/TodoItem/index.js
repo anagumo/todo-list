@@ -17,9 +17,13 @@ export default class TodoItem extends Component {
 
   render() {
     return (
-      <TouchableOpacity onPress={this.toggleTodo}>
+      <TouchableOpacity
+        style={styles.itemButton}
+        onPress={this.toggleTodo}
+        >
         <Text style={[styles.item, {
-          backgroundColor: (this.state.completed ? 'gray' : 'transparent')
+          opacity: (this.state.completed ? 0.5 : 1.0),
+          textDecorationLine: (this.state.completed ? 'line-through' : 'none')
         }]}>
           {this.props.title}
         </Text>
@@ -31,5 +35,9 @@ export default class TodoItem extends Component {
 const styles = StyleSheet.create({
   item: {
     padding: 10
+  },
+  itemButton: {
+    borderBottomWidth: 1,
+    borderColor: '#CCC'
   }
 })
