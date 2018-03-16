@@ -2,13 +2,28 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  TouchableOpacity
 } from 'react-native';
 
 export default class TodoItem extends Component {
+
+  state = {
+    completed: false
+  }
+
+  toggleTodo = () => {
+    this.setState({ completed: !this.state.completed })
+  }
+
   render() {
     return (
-      <Text style={styles.item}> 1. Go to the Library </Text>
+      <TouchableOpacity onPress={this.toggleTodo}>
+        <Text style={[styles.item, {
+          backgroundColor: (this.state.completed ? 'gray' : 'transparent')
+        }]}>
+          {this.props.title}
+        </Text>
+      </TouchableOpacity>
     )
   }
 }

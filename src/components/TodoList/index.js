@@ -3,25 +3,35 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  FlatList
 } from 'react-native';
 
 import TodoItem from './../TodoItem'
 
 export default class TodoList extends Component {
+
   render() {
+
+    const items = [
+      '1. Go to the library',
+      '2. Call my mom',
+      '3. Study Computer Science'
+    ]
+
     return (
       <View style={styles.container}>
         <Text style={styles.header}>
           Todo List
         </Text>
-        <View style={styles.content}>
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-        </View>
+        <FlatList
+          style={styles.content}
+          data= {items}
+          renderItem={(row) => {
+            return <TodoItem title={row.item} />
+          }}
+          keyExctractor={item => item}
+        />
       </View>
     )
   }
@@ -30,8 +40,6 @@ export default class TodoList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   header: {
