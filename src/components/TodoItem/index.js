@@ -1,22 +1,20 @@
-
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 
-import TodoList from './src/components/TodoList'
-
-export default class App extends Component<Props> {
+export default class TodoItem extends Component {
   render() {
     return (
-      <TodoList />
+      <Text style={styles.item}> 1. Go to the Library </Text>
     )
   }
 }
 
 const styles = StyleSheet.create({
-
+  item: {
+    padding: 10
+  }
 })
