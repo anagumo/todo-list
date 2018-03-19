@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import TodoItem from './../TodoItem'
-import { Button, Text as NBText } from 'native-base'
+import { Button, Text as NBText, Segment } from 'native-base'
 import CheckImage from './../../images/check.png'
 import { tasks } from './../../lib/api'
 
@@ -27,7 +27,8 @@ export default class TodoList extends Component {
   }
 
   state = {
-    items: null
+    items: null,
+    filter: 'All'
   }
 
   componentDidMount() {
@@ -77,6 +78,20 @@ export default class TodoList extends Component {
     })
   }
 
+  filteredItems = () => {
+    if (this.state.filter == 'Todo') {
+      return this.state.items.filter( item => {
+        return !item.completed
+      })
+    }
+    if (this.state.filter == 'Complete') {
+      return this.state.items.filter( item => {
+        return item.completed
+      })
+    }
+    return this.state.items
+  }
+
   render() {
 
     return (
@@ -89,7 +104,28 @@ export default class TodoList extends Component {
         </View>
         <View style={styles.contentWrapper}>
           <View style={styles.contentHeader}>
-            <Text>Content Header</Text>
+            <Segment style={styles.segment}>
+              <Button
+                first={true}
+                active={this.state.filter === 'All'}
+                onPress={() => this.setState({ filter: 'All'})}
+                >
+                <NBText>All</NBText>
+              </Button>
+              <Button
+                active={this.state.filter === 'Todo'}
+                onPress={() => this.setState({ filter: 'Todo'})}
+                >
+                <NBText>Todo</NBText>
+              </Button>
+              <Button
+                lastt={true}
+                active={this.state.filter === 'Complete'}
+                onPress={() => this.setState({ filter: 'Complete'})}
+                >
+                <NBText>Complete</NBText>
+              </Button>
+            </Segment>
           </View>
 
           {
@@ -102,7 +138,7 @@ export default class TodoList extends Component {
 
           <FlatList
             style={styles.content}
-            data= {this.state.items}
+            data= {this.filteredItems()}
             renderItem={(row) => {
               return <TodoItem
                 item={row.item}
@@ -114,7 +150,7 @@ export default class TodoList extends Component {
           />
           <View style={styles.contentFooter}>
             <Button onPress={this.addItem}>
-              <NBText>Add Item</NBText>
+              <NBText>Add TODO</NBText>
             </Button>
           </View>
         </View>
@@ -132,7 +168,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 20,
     alignSelf: 'stretch',
-    backgroundColor: '#2288ee'
+    backgroundColor: '#3F51B5'
   },
   headerText: {
     fontSize: 20,
@@ -144,6 +180,7 @@ const styles = StyleSheet.create({
   },
   contentHeader: {
     height: 50,
+    backgroundColor: '#3F51B5',
     borderBottomWidth: 1,
     borderColor: '#aaa',
     justifyContent: 'center',
@@ -151,7 +188,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
+    paddingTop: 10
   },
   contentFooter: {
     padding: 20,
@@ -161,5 +199,8 @@ const styles = StyleSheet.create({
   icon: {
     height: 20,
     resizeMode: 'contain'
+  },
+  segment: {
+    backgroundColor: '#3F51B5'
   }
 })
