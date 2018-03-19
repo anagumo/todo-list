@@ -13,6 +13,7 @@ import {
 import TodoItem from './../TodoItem'
 import { Button, Text as NBText } from 'native-base'
 import CheckImage from './../../images/check.png'
+import { tasks } from './../../lib/api'
 
 export default class TodoList extends Component {
   static navigationOptions = {
@@ -34,13 +35,12 @@ export default class TodoList extends Component {
   }
 
   fetchTasksList() {
-    fetch("your_base_url/items.json")
-      .then(response => response.json())
-      .then(items => {
-        this.setState({
-          items: items
-        })
+    tasks('GET')
+    .then(items => {
+      this.setState({
+        items: items
       })
+    })
   }
 
   addItem = () => {
@@ -51,18 +51,7 @@ export default class TodoList extends Component {
   }
 
   saveItem = (newTask) => {
-    const headers = new Headers()
-    headers.append('Accept', 'application/json')
-    headers.append('Content-Type', 'application/json')
-
-    fetch("your_base_url/items.json", {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        task: newTask
-      })
-    })
-    .then(response => response.json())
+    tasks('POST', { task: newTask })
     .then(items => {
       this.setState({
         items: items
@@ -71,19 +60,7 @@ export default class TodoList extends Component {
   }
 
   updateTodo = (id, completed) => {
-    const headers = new Headers()
-    headers.append('Accept', 'application/json')
-    headers.append('Content-Type', 'application/json')
-
-    fetch("your_base_url/items.json", {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify({
-        id,
-        completed
-      })
-    })
-    .then(response => response.json())
+    tasks('PUT', { id, completed })
     .then(items => {
       this.setState({
         items: items
@@ -92,18 +69,7 @@ export default class TodoList extends Component {
   }
 
   deleteTodo = (id) => {
-    const headers = new Headers()
-    headers.append('Accept', 'application/json')
-    headers.append('Content-Type', 'application/json')
-
-    fetch("your_base_url/items.json", {
-      method: 'DELETE',
-      headers,
-      body: JSON.stringify({
-        id
-      })
-    })
-    .then(response => response.json())
+    tasks('DELETE', { id })
     .then(items => {
       this.setState({
         items: items
