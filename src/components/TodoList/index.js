@@ -6,15 +6,23 @@ import {
   View,
   FlatList,
   StatusBar,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from 'react-native';
 
-import { Button, Text as NBText } from 'native-base'
 import TodoItem from './../TodoItem'
+import { Button, Text as NBText } from 'native-base'
+import CheckImage from './../../images/check.png'
 
 export default class TodoList extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
+    tabBarIcon: ({ tintColor }) => (
+      <Image
+        style={[styles.icon, { tintColor }]}
+        source={CheckImage} />
+    ),
+    tabBarLabel: 'List'
   }
 
   state = {
@@ -83,6 +91,26 @@ export default class TodoList extends Component {
     })
   }
 
+  deleteTodo = (id) => {
+    const headers = new Headers()
+    headers.append('Accept', 'application/json')
+    headers.append('Content-Type', 'application/json')
+
+    fetch("your_base_url/items.json", {
+      method: 'DELETE',
+      headers,
+      body: JSON.stringify({
+        id
+      })
+    })
+    .then(response => response.json())
+    .then(items => {
+      this.setState({
+        items: items
+      })
+    })
+  }
+
   render() {
 
     return (
@@ -112,7 +140,9 @@ export default class TodoList extends Component {
             renderItem={(row) => {
               return <TodoItem
                 item={row.item}
-                updateTodo={this.updateTodo}/>
+                updateTodo={this.updateTodo}
+                deleteTodo={this.deleteTodo}
+              />
             }}
             keyExctractor={item => item.id}
           />
@@ -161,5 +191,9 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'flex-end',
     flexDirection: 'row'
+  },
+  icon: {
+    height: 20,
+    resizeMode: 'contain'
   }
 })
