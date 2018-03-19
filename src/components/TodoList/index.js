@@ -5,7 +5,8 @@ import {
   Text,
   View,
   FlatList,
-  StatusBar
+  StatusBar,
+  ActivityIndicator
 } from 'react-native';
 
 import { Button, Text as NBText } from 'native-base'
@@ -17,7 +18,21 @@ export default class TodoList extends Component {
   }
 
   state = {
-    items: []
+    items: null
+  }
+
+  componentDidMount() {
+    this.fetchTasksList()
+  }
+
+  fetchTasksList() {
+    fetch("your_base_url/items.json")
+      .then(response => response.json())
+      .then(items => {
+        this.setState({
+          items: items
+        })
+      })
   }
 
   addItem = () => {
@@ -28,8 +43,43 @@ export default class TodoList extends Component {
   }
 
   saveItem = (newTask) => {
-    this.setState({
-      items: [...this.state.items, newTask]
+    const headers = new Headers()
+    headers.append('Accept', 'application/json')
+    headers.append('Content-Type', 'application/json')
+
+    fetch("your_base_url/items.json", {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        task: newTask
+      })
+    })
+    .then(response => response.json())
+    .then(items => {
+      this.setState({
+        items: items
+      })
+    })
+  }
+
+  updateTodo = (id, completed) => {
+    const headers = new Headers()
+    headers.append('Accept', 'application/json')
+    headers.append('Content-Type', 'application/json')
+
+    fetch("your_base_url/items.json", {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        id,
+        completed
+      })
+    })
+    .then(response => response.json())
+    .then(items => {
+      this.setState({
+        items: items
+      })
     })
   }
 
@@ -47,13 +97,24 @@ export default class TodoList extends Component {
           <View style={styles.contentHeader}>
             <Text>Content Header</Text>
           </View>
+
+          {
+            !this.state.items && <ActivityIndicator
+              size="large"
+              color="#2288ee"
+              style={{ marginTop: 20 }}
+            />
+          }
+
           <FlatList
             style={styles.content}
             data= {this.state.items}
             renderItem={(row) => {
-              return <TodoItem title={row.item} />
+              return <TodoItem
+                item={row.item}
+                updateTodo={this.updateTodo}/>
             }}
-            keyExctractor={item => item}
+            keyExctractor={item => item.id}
           />
           <View style={styles.contentFooter}>
             <Button onPress={this.addItem}>
