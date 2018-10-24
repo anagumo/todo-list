@@ -17,6 +17,6 @@ Running the app:
 * Then `react-native run-android` or `react-native run-ios`
 
 What's next:
-* Improve the app using Realm Database
+* Improve the app using Redux
 
 ![](/art/todo-list.png)
