@@ -7,20 +7,23 @@ import {
   View
 } from 'react-native';
 
-import { TabNavigator, StackNavigator } from 'react-navigation'
+import {
+  createBottomTabNavigator,
+  createStackNavigator
+} from 'react-navigation'
 
 import TodoList from './src/components/TodoList'
 import About from './src/components/About'
 import AddTodo from './src/components/AddTodo'
 
-const TodoNav = StackNavigator({
+const TodoNav = createStackNavigator({
   TodoList: { screen: TodoList },
   AddTodo: { screen: AddTodo }
 }, {
   mode: 'modal'
 })
 
-const TabNav = TabNavigator({
+const TabNav = createBottomTabNavigator({
   TodoNav: { screen: TodoNav },
   About: { screen: About }
 }, {
@@ -28,7 +31,6 @@ const TabNav = TabNavigator({
   tabBarOptions: {
     activeTintColor: '#0066cc'
   },
-  ...TabNavigator.Presets.iOSBottomTabs
 })
 
 export default class App extends Component<Props> {
