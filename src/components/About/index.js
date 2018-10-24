@@ -4,11 +4,11 @@ import {
   View,
   Text,
   Image
-} from 'react-native';
-
+} from 'react-native'
+import { connect } from 'react-redux'
 import AboutImage from './../../images/star.png'
 
-export default class About extends Component {
+class About extends Component {
   static navigationOptions = {
     header: null,
     tabBarIcon: ({ tintColor }) => (
@@ -20,24 +20,51 @@ export default class About extends Component {
   }
 
   render() {
+    const completedItems = this.props.items.filter(item => {
+      return item.completed
+    }).length
+    const uncompletedItems = this.props.items.filter(item => {
+      !item.completed
+    }).length
+
     return (
       <View style={styles.container}>
-        <Text style={{
-          fontSize: 20,
-          textAlign: 'center',
-          padding: 20
-        }}>About</Text>
+        <Text style={styles.title}>
+          About
+        </Text>
+        <Text style={styles.count}>
+          Completed tasks: {completedItems}
+        </Text>
+        <Text style={styles.count}>
+          Uncompleted tasks: {uncompletedItems}
+        </Text>
       </View>
     )
   }
 }
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    items: state.todos.items
+  }
+}
+
+export default connect(mapStateToProps)(About)
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center'
   },
   icon: {
     height: 24,
     resizeMode: 'contain'
+  },
+  title: {
+    fontSize: 20,
+    padding: 20
+  },
+  count: {
+    fontSize: 16
   }
 })

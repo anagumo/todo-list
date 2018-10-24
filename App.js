@@ -6,15 +6,16 @@ import {
   Text,
   View
 } from 'react-native';
-
 import {
   createBottomTabNavigator,
   createStackNavigator
 } from 'react-navigation'
-
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import TodoList from './src/components/TodoList'
 import About from './src/components/About'
 import AddTodo from './src/components/AddTodo'
+import rootReducer from './src/reducers'
 
 const TodoNav = createStackNavigator({
   TodoList: { screen: TodoList },
@@ -33,14 +34,17 @@ const TabNav = createBottomTabNavigator({
   },
 })
 
-export default class App extends Component<Props> {
+const store = createStore(rootReducer)
+console.warn("Store", store.getState())
+
+class App extends Component<Props> {
   render() {
     return (
-      <TabNav />
+      <Provider store={store}>
+        <TabNav />
+      </Provider>
     )
   }
 }
 
-const styles = StyleSheet.create({
-
-})
+export default App
