@@ -14,7 +14,7 @@ import TodoItem from './../TodoItem'
 import { Button, Text as NBText, Segment } from 'native-base'
 import CheckImage from './../../images/check.png'
 import { tasks } from './../../lib/api'
-import { addTodo } from './../../actions/todos'
+import { addTodo, loadTodos } from './../../actions/todos'
 import {
   todoItems,
   completedItems,
@@ -42,12 +42,7 @@ class TodoList extends Component {
   }
 
   fetchTasksList() {
-    tasks('GET')
-    .then(items => {
-      this.setState({
-        items: items
-      })
-    })
+    this.props.loadTodos()
   }
 
   addItem = () => {
@@ -66,7 +61,7 @@ class TodoList extends Component {
   deleteTodo = (id) => {
     tasks('DELETE', { id })
     .then(items => {
-      this.setState({
+      this.setstate({
         items: items
       })
     })
@@ -119,7 +114,7 @@ class TodoList extends Component {
           </View>
 
           {
-            !this.state.items && <ActivityIndicator
+            this.props.loading && <ActivityIndicator
               size="large"
               color="#2288ee"
               style={{ marginTop: 20 }}
@@ -153,13 +148,14 @@ const mapStateToProps = (state, ownProps) => {
   return {
     items: todoItems(state),
     completedItems: completedItems(state),
-    uncompletedItems: uncompletedItems(state)
+    uncompletedItems: uncompletedItems(state),
+    loading: state.todos.loading
   }
 }
 
 export default connect(
   mapStateToProps,
-  { addTodo }
+  { addTodo, loadTodos }
 )(TodoList)
 
 const styles = StyleSheet.create({

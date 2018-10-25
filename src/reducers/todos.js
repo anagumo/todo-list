@@ -1,24 +1,14 @@
 const initialState = {
-  items: [
-    {
-      "id": 1,
-      "task": "Learn Redux",
-      "completed": true
-    },
-    {
-      "id": 2,
-      "task": "Dinner with mom",
-      "completed": false
-    },
-    {
-      "id": 3,
-      "task": "Take a cold shower",
-      "completed": false
-    },
-  ]
+  items: [],
+  loading: false
 }
 
-import { ADD_TODO } from '../actions/types'
+import {
+  ADD_TODO,
+  SET_TODOS,
+  TODOS_LOADING,
+  TODOS_LOADED
+} from '../actions/types'
 
 const todos = (state = initialState, action) => {
   switch(action.type) {
@@ -29,6 +19,21 @@ const todos = (state = initialState, action) => {
           ...state.items,
           action.task
         ]
+      }
+    case SET_TODOS:
+      return {
+        ...state,
+        items: action.items
+      }
+    case TODOS_LOADING:
+      return {
+        ...state,
+        loading: true
+      }
+    case TODOS_LOADED:
+      return {
+        ...state,
+        loading: false
       }
   }
 

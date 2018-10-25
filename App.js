@@ -11,7 +11,8 @@ import {
   createStackNavigator
 } from 'react-navigation'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 import TodoList from './src/components/TodoList'
 import About from './src/components/About'
 import AddTodo from './src/components/AddTodo'
@@ -34,8 +35,10 @@ const TabNav = createBottomTabNavigator({
   },
 })
 
-const store = createStore(rootReducer)
-console.warn("Store", store.getState())
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+)
 
 class App extends Component<Props> {
   render() {
