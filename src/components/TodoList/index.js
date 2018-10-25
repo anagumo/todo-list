@@ -14,6 +14,7 @@ import TodoItem from './../TodoItem'
 import { Button, Text as NBText, Segment } from 'native-base'
 import CheckImage from './../../images/check.png'
 import { tasks } from './../../lib/api'
+import { addTodo } from './../../actions/todos'
 
 class TodoList extends Component {
   static navigationOptions = {
@@ -45,19 +46,7 @@ class TodoList extends Component {
   }
 
   addItem = () => {
-    this.props.navigation.navigate(
-      'AddTodo',
-      { saveItem: this.saveItem }
-    )
-  }
-
-  saveItem = (newTask) => {
-    tasks('POST', { task: newTask })
-    .then(items => {
-      this.setState({
-        items: items
-      })
-    })
+    this.props.navigation.navigate('AddTodo')
   }
 
   updateTodo = (id, completed) => {
@@ -165,7 +154,10 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps)(TodoList)
+export default connect(
+  mapStateToProps,
+  { addTodo }
+)(TodoList)
 
 const styles = StyleSheet.create({
   container: {

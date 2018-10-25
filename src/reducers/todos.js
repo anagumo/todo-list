@@ -17,7 +17,21 @@ const initialState = {
     },
   ]
 }
+
+import { ADD_TODO } from '../actions/types'
+
 const todos = (state = initialState, action) => {
+  switch(action.type) {
+    case ADD_TODO:
+      return {
+        ...state,
+        items: [
+          ...state.items,
+          action.task
+        ]
+      }
+  }
+
   return state
 }
 

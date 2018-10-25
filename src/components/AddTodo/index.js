@@ -7,10 +7,11 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
-
+import { connect } from 'react-redux'
 import { Form, Item, Input, Button, Text as NBText } from 'native-base'
+import { addTodo } from '../../actions/todos'
 
-export default class AddTodo extends Component {
+class AddTodo extends Component {
 
   state = {
     task: ''
@@ -22,7 +23,11 @@ export default class AddTodo extends Component {
 
   onAdd = () => {
     if (this.state.task !== '') {
-      this.props.navigation.state.params.saveItem(this.state.task)
+      this.props.addTodo({
+        id: new Date().getTime(),
+        task: this.state.task,
+        completed: false
+      })
       this.props.navigation.goBack()
     } else {
       console.warn("Type some text")
@@ -51,6 +56,8 @@ export default class AddTodo extends Component {
     )
   }
 }
+
+export default connect(undefined, { addTodo })(AddTodo)
 
 const styles = StyleSheet.create({
   container: {
