@@ -7,6 +7,10 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import AboutImage from './../../images/star.png'
+import {
+  completedItems,
+  uncompletedItems
+} from '../../selectors/todos'
 
 class About extends Component {
   static navigationOptions = {
@@ -20,12 +24,8 @@ class About extends Component {
   }
 
   render() {
-    const completedItems = this.props.items.filter(item => {
-      return item.completed
-    }).length
-    const uncompletedItems = this.props.items.filter(item => {
-      !item.completed
-    }).length
+    const completedItems = this.props.completedItems.length
+    const uncompletedItems = this.props.uncompletedItems.length
 
     return (
       <View style={styles.container}>
@@ -45,7 +45,8 @@ class About extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    items: state.todos.items
+    completedItems: completedItems(state),
+    uncompletedItems: uncompletedItems(state)
   }
 }
 

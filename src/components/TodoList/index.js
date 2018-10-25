@@ -15,6 +15,11 @@ import { Button, Text as NBText, Segment } from 'native-base'
 import CheckImage from './../../images/check.png'
 import { tasks } from './../../lib/api'
 import { addTodo } from './../../actions/todos'
+import {
+  todoItems,
+  completedItems,
+  uncompletedItems
+} from '../../selectors/todos'
 
 class TodoList extends Component {
   static navigationOptions = {
@@ -69,14 +74,10 @@ class TodoList extends Component {
 
   filteredItems = () => {
     if (this.state.filter == 'Todo') {
-      return this.props.items.filter( item => {
-        return !item.completed
-      })
+      return this.props.uncompletedItems
     }
     if (this.state.filter == 'Complete') {
-      return this.props.items.filter( item => {
-        return item.completed
-      })
+      return this.props.completedItems
     }
     return this.props.items
   }
@@ -150,7 +151,9 @@ class TodoList extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    items: state.todos.items
+    items: todoItems(state),
+    completedItems: completedItems(state),
+    uncompletedItems: uncompletedItems(state)
   }
 }
 
